@@ -1,0 +1,76 @@
+import tls from 'tls';
+import os from 'os';
+import 'dotenv/config';
+
+let tlsOptions = {
+    allowInternalNetworkInterfaces: false,
+    host: '173.194.222.108',
+    port: 465,
+    servername: 'smtp.gmail.com'
+}
+
+function generateAuthToken(user, pass) {
+    return Buffer.from('\u0000' + user + '\u0000' + pass, 'utf-8').toString('base64');
+}
+
+let resolver;
+
+function onData(chunk) {
+    let data = (chunk || '').toString('binary');
+    let lines = data.split(/\r?\n/);
+ 
+    console.log(lines);
+    return resolver ? resolver() : Promise.resolve();
+
+}
+
+function writeCommand(socket, command) {
+    socket.write(Buffer.from(command, 'utf-8'));
+    const globalPromise = new Promise((resolve, reject) => {
+        resolver = resolve;
+    });
+    return globalPromise;
+}
+
+function subscribeEvents(socket) {
+    socket.on('data', (chunk) => {
+        console.log('data');
+        onData(chunk);
+    });
+    socket.on('close', (arg) => {
+        console.log('close', arg);
+    });
+    socket.on('end', () => {
+        console.log('end');
+    });
+    socket.on('timeout', (arg, arg1) => {
+        console.log('timeout', arg, arg1);
+    });
+    socket.on('error', (arg1, arg2) => {
+        console.log('error', arg1, arg2);
+    });
+}
+
+async function sendEmail() {
+    try {
+        const socket = tls.connect(tlsOptions, async () => {
+            socket.setKeepAlive(true);
+            const authToken = generateAuthToken(process.env.EMAIL, process.env.PASSWORD);
+
+            await writeCommand(socket, `EHLO ${os.hostname()}` + '\r\n');
+            await writeCommand(socket, `AUTH PLAIN ${authToken}` + '\r\n');
+            await writeCommand(socket, `MAIL FROM:<${process.env.EMAIL}>` + '\r\n');
+            await writeCommand(socket, 'RCPT TO:<Swivt888@gmail.com>' + '\r\n');
+            await writeCommand(socket, 'DATA' + '\r\n');
+            await writeCommand(socket, 'Hello World'); //specify email content here
+            await writeCommand(socket, '\r\n.\r\n');
+            await writeCommand(socket, 'QUIT',  + '\r\n');
+        })
+
+        subscribeEvents(socket);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+sendEmail()

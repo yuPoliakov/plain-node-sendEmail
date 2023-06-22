@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
-  "author": "Yurii <Swivt888@gmail.com>",
+  "author": "Yurii Poliakov",
   "license": "MIT",
   "dependencies": {
     "dotenv": "^16.3.1",

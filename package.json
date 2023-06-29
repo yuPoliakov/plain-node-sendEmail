@@ -1,9 +1,10 @@
 {
-  "name": "pure-node-send-email",
-  "version": "1.0.0",
+  "name": "puremail",
+  "private": false,
+  "version": "1.0.3",
   "main": "index.js",
   "type": "module",
-  "author": "Yurii Poliakov",
+  "author": "Yurii Poliakov, Swivt888@gmail.com",
   "license": "MIT",
   "dependencies": {
     "dotenv": "^16.3.1",

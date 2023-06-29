@@ -1,7 +1,7 @@
 {
   "name": "puremail",
   "private": false,
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "index.js",
   "type": "module",
   "author": "Yurii Poliakov, Swivt888@gmail.com",

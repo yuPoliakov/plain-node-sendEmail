@@ -1,7 +1,7 @@
 {
   "name": "puremail",
   "private": false,
-  "version": "1.0.4",
+  "version": "1.0.6",
   "main": "index.js",
   "type": "module",
   "author": "Yurii Poliakov, Swivt888@gmail.com",
@@ -13,5 +13,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/yuPoliakov/puremail.git"
-  }
+  },
+  "keywords": [
+    "email",
+    "mail",
+    "node email"
+  ]
 }
